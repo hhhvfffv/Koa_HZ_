@@ -98,7 +98,6 @@ const isUserLegal = async (ctx, next) => {
         return
     }
 
-    console.log(5);
 
     await next()
 }

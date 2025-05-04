@@ -21,7 +21,9 @@
     "jsonwebtoken": "^9.0.2",
     "koa": "^2.16.1",
     "koa-body": "^6.0.1",
+    "koa-parameter": "^3.0.1",
     "koa-router": "^13.0.1",
+    "koa-static": "^5.0.0",
     "mysql2": "^3.14.0",
     "sequelize": "^6.37.7"
   }

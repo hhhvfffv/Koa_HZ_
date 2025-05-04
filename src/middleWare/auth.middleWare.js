@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const { JOSN_WEB_TOKEN } = require('../config/config.default')
 const { TokenExpiredError, JsonWebTokenError, NotBeforeError } = require('../constant/err.type')
+const { getUser } = require('../service/user.service')
+const { notIsAdmain } = require('../constant/err.type')
 
 class AuthMiddleware {
 
@@ -39,6 +41,16 @@ class AuthMiddleware {
             return
         }
 
+        await next()
+    }
+
+    //确认管理员权限
+    async isAdmain(ctx, next) {
+
+        const { isAdmin } = await getUser({ id: ctx.state.user.id })
+        if (!isAdmin) {
+            return ctx.app.emit('error', notIsAdmain, ctx)
+        }
         await next()
     }
 }

@@ -13,10 +13,7 @@ class ErrorHandler {
                 break
         }
 
-        ctx.body = {
-            message: err.message,
-            result: '土豆服务器错误'
-        }
+        ctx.body = err
     }
 }
 
