@@ -1,6 +1,22 @@
 class ErrorHandler {
     async allError(err, ctx) {
-        console.log(err);
+        ctx.status = 500;
+        switch (err.code) {
+            case '10001':
+                ctx.status = 401;
+                break
+            case '10002':
+                ctx.status = 403;
+                break
+            default:
+                ctx.status = 500;
+                break
+        }
+
+        ctx.body = {
+            message: err.message,
+            result: '土豆服务器错误'
+        }
     }
 }
 
