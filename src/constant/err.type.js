@@ -77,5 +77,15 @@ module.exports = {
         code: '10014',
         message: '商品名称重复',
         result: ''
+    },
+    updateGoodsError: {
+        code: '10015',
+        message: '商品更新失败,数据库操作错误',
+        result: ''
+    },
+    notFoundIdError: {
+        code: '10016',
+        message: '你确定你传的id是存在的吗',
+        result: ''
     }
 }

@@ -41,24 +41,6 @@ const isUserDuplicate = async (ctx, next) => {
 //3.用户密码加密
 const encryptPassword = async (ctx, next) => {
     try {
-        // if (ctx.URL.pathname == '/user/password') {
-        //     //修改密码
-        //     //加密
-        //     const { newPassword } = ctx.request.body;
-        //     const salt = bcrypt.genSaltSync(10);
-        //     const hash = bcrypt.hashSync(newPassword, salt);
-        //     //挂载回去
-        //     ctx.request.body.password = hash;
-        // } else {
-        //     //加密
-        //     const { password } = ctx.request.body;
-        //     const salt = bcrypt.genSaltSync(10);
-        //     const hash = bcrypt.hashSync(password, salt);
-        //     //挂载回去
-        //     ctx.request.body.password = hash;
-        // }
-
-
         let password
         switch (ctx.URL.pathname) {
             //修改密码

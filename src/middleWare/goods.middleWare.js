@@ -17,6 +17,13 @@ class GoodsMiddleware {
         await next()
     }
 
+    /**
+     * 1. 检查商品是否重复
+     * 2.需要request.body.goods_name
+     * @param {*} ctx 
+     * @param {*} next 
+     * @returns 
+     */
     async EnsureNoPuplication(ctx, next) {
         const { goods_name } = ctx.request.body
         try {
