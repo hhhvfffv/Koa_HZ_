@@ -59,6 +59,7 @@ const encryptPassword = async (ctx, next) => {
 
     } catch (err) {
         console.error(err);
+        return ctx.app.emit('error', userRegisterError, ctx)
     }
 
     await next()

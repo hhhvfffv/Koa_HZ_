@@ -1,6 +1,12 @@
-const { ParameterError, selectGoodsError, DuplicateProductError } = require('../constant/err.type')
-const { selectGoods } = require('../service/goods.service')
+const { ParameterError, selectGoodsError, DuplicateProductError, notFoundIdError } = require('../constant/err.type')
+const { selectGoods, selectAllGoods } = require('../service/goods.service')
 class GoodsMiddleware {
+    /**
+     * 1.检测是否有必要字段
+     * @param {*} ctx 
+     * @param {*} next 
+     * @returns 
+     */
     async checkField(ctx, next) {
         try {
             ctx.verifyParams({
@@ -33,10 +39,27 @@ class GoodsMiddleware {
             }
         } catch (error) {
             console.error(error);
-            ctx.app.emit('error', selectGoodsError, ctx)
+            return ctx.app.emit('error', selectGoodsError, ctx)
         }
 
 
+        await next()
+    }
+    /**
+     * 检查这个id的记录是否存在
+     */
+    async productExist(ctx, next) {
+        const { id } = ctx.params
+        try {
+            //返回一条记录，有就代表存在
+            const res = await selectAllGoods({ id })
+            if (res.length === 0) {
+                return ctx.app.emit('error', notFoundIdError, ctx)
+            }
+        } catch (error) {
+            console.error(error)
+            return ctx.app.emit('error', selectGoodsError, ctx)
+        }
         await next()
     }
 }
