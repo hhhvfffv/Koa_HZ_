@@ -19,7 +19,7 @@ const isUserEmpty = async (ctx, next) => {
 }
 
 /**userRegisterError
- * 2.查重处理
+ * 2.查重->查询用户是否存在
  */
 const isUserDuplicate = async (ctx, next) => {
     const { user_name } = ctx.request.body;
@@ -38,7 +38,14 @@ const isUserDuplicate = async (ctx, next) => {
     await next()
 }
 
-//3.用户密码加密
+/**
+ * 1.写入数据库之前，密码加密
+ * 2.分情况，修改密码和注册用户
+ * 3.修改密码时要加密的是新密码，然后执行存入数据库
+ * @param {*} ctx 
+ * @param {*} next 
+ * @returns 
+ */
 const encryptPassword = async (ctx, next) => {
     try {
         let password
@@ -65,7 +72,12 @@ const encryptPassword = async (ctx, next) => {
     await next()
 }
 
-//4.用户合法性验证
+/**
+ * 查找用户是否存在，合法
+ * @param {*} ctx 
+ * @param {*} next 
+ * @returns 
+ */
 const isUserLegal = async (ctx, next) => {
     //1.获得数据
     const { user_name } = ctx.request.body;
@@ -85,7 +97,13 @@ const isUserLegal = async (ctx, next) => {
     await next()
 }
 
-//5.密码验证
+/**
+ * 1.密码验证
+ * 2.把数据库的密码拿出来解析，然后和用户输入的密码进行比对
+ * @param {*} ctx 
+ * @param {*} next 
+ * @returns 
+ */
 const isPasswordCorrect = async (ctx, next) => {
     try {
         //1.获得数据

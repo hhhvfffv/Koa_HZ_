@@ -6,7 +6,12 @@ const { getUser, updateUser } = require('../service/user.service')
 
 class UserRouteClass {
 
-    //注册
+    /**
+     * 1.注册用户
+     * @param {*} ctx 
+     * @param {*} next 
+     * @returns 
+     */
     async register(ctx, next) {
         const { user_name, password, isAdmin = 0 } = ctx.request.body
         try {
@@ -27,7 +32,13 @@ class UserRouteClass {
         }
     }
 
-    //登录
+    /**
+     * 1.登录并返回信息
+     * 2.返回token给请求端
+     * @param {*} ctx 
+     * @param {*} next 
+     * @returns 
+     */
     async login(ctx, next) {
 
         //返回token
@@ -55,7 +66,13 @@ class UserRouteClass {
 
     }
 
-    //改密码
+    /**
+     * 1.修改密码
+     * 2.操作数据库
+     * @param {*} ctx 
+     * @param {*} next 
+     * @returns 
+     */
     async changPassword(ctx, next) {
         // 更改
         const { id } = ctx.state.user

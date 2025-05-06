@@ -2,6 +2,10 @@ const { creteGoods, updateGoods, removeGoods, restoreGoods, PageQueryGoods } = r
 const { createGoodsError, updateGoodsError, notFoundIdError, removeGoodsError, repeatedRemovalError, resultIsEmpty, restoreGoodsError, repeatedRestoreError, selectPageGoodsError } = require('../constant/err.type')
 class GoodsController {
     async upload(ctx) {
+        /**
+         * 1.获取上传文件
+         * 2.返回给请求端，用于回显
+         */
         const file = ctx.request.files.file
         //判断是否为数组
         if (file instanceof Array) {
@@ -21,6 +25,11 @@ class GoodsController {
         }
     }
 
+    /**
+     * 2.创建一条商品信息记录
+     * @param {*} ctx 
+     * @returns 
+     */
     async create(ctx) {
         const dataCreate = ctx.request.body;
         const upload_user = ctx.state.user.user_name
