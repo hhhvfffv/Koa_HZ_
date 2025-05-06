@@ -2,13 +2,12 @@ const { isUserRepeat, isUserHaveNull, userRegisterError, isUserNotExist, isDataS
 const { getUser } = require('../service/user.service')
 const bcrypt = require('bcryptjs')
 
-
-const isUserEmpty = async (ctx, next) => {
-    /**
-     * 验证用户是否为空
+/**
+     * 1.验证用户是否为空
      * @param {Object} ctx 请求上下文对象
      * @param {Function} next 回调函数
      */
+const isUserEmpty = async (ctx, next) => {
     const { user_name, password } = ctx.request.body;
     if (!user_name || !password) {
         ctx.body = "不能为空"
