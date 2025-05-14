@@ -117,5 +117,25 @@ module.exports = {
         code: '10022',
         message: '查询结果为空',
         result: ''
+    },
+    ParameterCartError: {
+        code: '10023',
+        message: '购物车参数错误',
+        result: ''
+    },
+    notFountIdError: {
+        code: '10024',
+        message: '商品下架中',
+        result: ''
+    },
+    isNullFountError: {
+        code: '10025',
+        message: '商品不存在',
+        result: ''
+    },
+    isAddCartError: {
+        code: '10026',
+        message: '添加购物车失败',
+        result: ''
     }
 }
