@@ -1,7 +1,14 @@
 const { Op } = require('sequelize');
-const Cart = require('../model/cart.model')
+const Cart = require('../model/cart.model');
+const Goods = require('../model/goods.model');
 
 class CartService {
+    /**
+     * 添加购物车，需要验证
+     * @param {*} user_id 
+     * @param {*} goods_id 
+     * @returns 
+     */
     async addCart(user_id, goods_id) {
         const res_ = await Cart.findOne({
             attributes: { exclude: ['createdAt', 'updatedAt'] },
@@ -23,6 +30,47 @@ class CartService {
                 attributes: { exclude: ['createdAt', 'updatedAt'] }
             })
         }
+    }
+
+    /**
+     * 查询购物车列表
+     */
+    async findCart({ pageNum, pageSize }) {
+        const offset = (pageNum - 1) * pageSize
+        const { count, rows } = await Cart.findAndCountAll({
+            attributes: { exclude: ['createdAt', 'updatedAt'] },
+            offset,
+            limit: +pageSize,
+            include: [{
+                //关联商品信息
+                model: Goods,
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+                as: 'goods_info',//别名
+            }
+            ]
+        })
+
+        return {
+            pageNum,
+            pageSize,
+            total: count,
+            list: rows
+        }
+    }
+    /**
+     * 更新购物车信息
+     * @param {*} selected 
+     */
+    async updateCart({ selected, cart_num }, id) {
+        const res = await Cart.findByPk(id)//根据id查找购物车信息
+        if (!res) return ''
+
+        selected !== undefined ? res.selected = selected : ""
+        cart_num !== undefined ? res.cart_num = cart_num : ""
+
+        //保存更新后的信息
+        await res.save()
+        return res
     }
 }
 

@@ -137,5 +137,20 @@ module.exports = {
         code: '10026',
         message: '添加购物车失败',
         result: ''
+    },
+    isFoundPageError: {
+        code: '10027',
+        message: '分页查询失败',
+        result: ''
+    },
+    isUpdateCartError: {
+        code: '10028',
+        message: '更新购物车失败',
+        result: ''
+    },
+    isNullError: {
+        code: '10029',
+        message: '参数为空，必要参数cart_num,和selected',
+        result: ''
     }
 }
