@@ -1,6 +1,6 @@
 const koaRouter = require('koa-router');
 const { getUserTokenInfo } = require('../middleWare/auth.middleWare');
-const { add, findAll, update } = require('../controller/carts.controller')
+const { add, findAll, update, remove, selectAll, unselectAll, total } = require('../controller/carts.controller')
 const { FieldValidation, confirmGoodId, confirmGoodIdAll } = require('../middleWare/cart.middleWare')
 
 const router = new koaRouter({ prefix: '/carts' });
@@ -24,10 +24,30 @@ router.post('/add',
  */
 router.get('/', getUserTokenInfo, findAll)
 
-
+/**
+ * /:id 更新购物车
+ */
 router.patch('/:id', getUserTokenInfo, FieldValidation({
     selected: { type: 'boolean', required: false },
     cart_num: { type: 'number', required: false },
 }), update)
+
+/**
+ * 删除，批量删除
+ */
+router.delete('/', getUserTokenInfo, FieldValidation({
+    ids: { type: 'array', required: true },
+}), remove)
+
+/**
+ * 全选全不选
+ */
+router.post('/selectAll', getUserTokenInfo, selectAll)
+router.post('/unselectAll', getUserTokenInfo, unselectAll)
+
+/**
+ * 获取购物车总数
+ */
+router.get('/total', getUserTokenInfo, total)
 
 module.exports = router;

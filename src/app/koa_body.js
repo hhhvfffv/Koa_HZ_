@@ -27,7 +27,8 @@ const koa_body_file = (app, koaBody, path, fs) => {
                             throw err; //抛出错误，触发onError  这个就是catch检测捕捉的err
                         }
                     }
-                }
+                },
+                parsedMethods: ['POST', 'PUT', 'PATCH', 'DELETE']
             })(ctx, next)
         } catch (err) {
             console.log(err)

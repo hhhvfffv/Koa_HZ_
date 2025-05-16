@@ -152,5 +152,15 @@ module.exports = {
         code: '10029',
         message: '参数为空，必要参数cart_num,和selected',
         result: ''
+    },
+    isRemooveError: {
+        code: '10030',
+        message: '删除购物车失败',
+        result: ''
+    },
+    selectAllError: {
+        code: '10031',
+        message: '全选/全不选所有商品失败',
+        result: ''
     }
 }

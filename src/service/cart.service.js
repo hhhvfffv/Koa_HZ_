@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 const Cart = require('../model/cart.model');
 const Goods = require('../model/goods.model');
 
@@ -71,6 +71,51 @@ class CartService {
         //保存更新后的信息
         await res.save()
         return res
+    }
+    /**
+     * 删除一个商品
+     * @param {*} id
+     * 需要一个参数ids数组
+     */
+    async removeCart(ids) {
+        const res = await Cart.destroy({
+            where: {
+                id: {
+                    [Op.in]: ids
+                }
+            },
+            force: true
+        })
+
+        return res
+    }
+
+    /**
+     * 全选全不选
+     */
+    async selectAllOrUn(selected, user_id) {
+        const res = await Cart.update({
+            selected: selected,
+        }, {
+            where: {
+                user_id
+            }
+        })
+        return res
+    }
+
+    /**
+     * 返回该用户的购物车总数
+     * 
+     */
+    async getCartCount(user_id) {
+        const { count } = await Cart.findAndCountAll({
+            where: {
+                user_id
+            }
+        })
+
+        return count
     }
 }
 
