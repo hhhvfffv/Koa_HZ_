@@ -1,4 +1,3 @@
-
 //导出
 module.exports = {
     isUserHaveNull: {
@@ -162,5 +161,50 @@ module.exports = {
         code: '10031',
         message: '全选/全不选所有商品失败',
         result: ''
-    }
+    },
+    createAddressError: {
+        code: '10032',
+        message: '创建地址失败',
+        result: ''
+    },
+    findIdError: {
+        code: '10033',
+        message: '地址id不存在',
+        result: ''
+    },
+    pageSelectError: {
+        code: '10034',
+        message: '分页查询失败',
+        result: ''
+    },
+    removeAddressError: {
+        code: '10035',
+        message: '删除地址失败',
+        result: ''
+    },
+    createOrderMiddleWareError: {
+        code: '10036',
+        message: '订单中间件错误',
+        result: ''
+    },
+    createOrderError: {
+        code: '10037',
+        message: '订单创建失败,数据库操作错误',
+        result: ''
+    },
+    clearCartError: {
+        code: '10037',
+        message: "清空购物车失败",
+        result: ''
+    },
+    createGoodOrderError: {
+        code: '10038',
+        message: '商品订单创建失败,数据库操作错误',
+        result: ''
+    },
+    cancelOrderError: {
+        code: '10039',
+        message: '订单取消失败,数据库操作错误',
+        result: ''
+    },
 }

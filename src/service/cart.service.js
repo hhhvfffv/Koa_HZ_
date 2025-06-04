@@ -35,7 +35,26 @@ class CartService {
     /**
      * 查询购物车列表
      */
-    async findCart({ pageNum, pageSize }) {
+    async findCart({ pageNum, pageSize }, user_id) {
+        //如果没有传入分页参数，则返回所有数据
+        if (pageNum == undefined && pageSize == undefined) {
+            const { count, rows } = await Cart.findAndCountAll({
+                attributes: { exclude: ['createdAt', 'updatedAt'] },
+                where: {
+                    selected: true,
+                    user_id
+                },
+                include: [{
+                    //关联商品信息
+                    model: Goods,
+                    attributes: { exclude: ['createdAt', 'updatedAt'] },
+                    as: 'goods_info',//别名
+                }
+                ]
+            })
+            return { count, rows }
+        }
+
         const offset = (pageNum - 1) * pageSize
         const { count, rows } = await Cart.findAndCountAll({
             attributes: { exclude: ['createdAt', 'updatedAt'] },
@@ -116,6 +135,19 @@ class CartService {
         })
 
         return count
+    }
+
+    /**
+     * 清空购物车
+     */
+    async clearCart_(user_id) {
+        const res = await Cart.destroy({
+            where: {
+                user_id
+            }
+        })
+
+        return res
     }
 }
 

@@ -22,7 +22,7 @@ class GoodsService {
             where: whereOpj,
         })
 
-        return res ? res.dataValues : null;
+        return res ? res : null;
     }
 
     /**
