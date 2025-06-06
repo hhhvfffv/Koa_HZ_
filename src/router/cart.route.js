@@ -1,7 +1,7 @@
 const koaRouter = require('koa-router');
 const { getUserTokenInfo } = require('../middleWare/auth.middleWare');
 const { add, findAll, update, remove, selectAll, unselectAll, total } = require('../controller/carts.controller')
-const { FieldValidation, confirmGoodId, confirmGoodIdAll } = require('../middleWare/cart.middleWare')
+const { FieldValidation, confirmGoodId, confirmGoodIdAll, confirmGoodStock } = require('../middleWare/cart.middleWare')
 
 const router = new koaRouter({ prefix: '/carts' });
 
@@ -16,6 +16,7 @@ router.post('/add',
     }),
     confirmGoodIdAll,
     confirmGoodId,
+    confirmGoodStock,
     add
 )
 

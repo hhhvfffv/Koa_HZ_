@@ -1,4 +1,6 @@
-const { createOrderMiddleWareError, clearCartError, createGoodOrderError, cancelOrderError } = require("../constant/err.type");
+const { createOrderMiddleWareError, clearCartError, createGoodOrderError, cancelOrderError, goodsNumIsNullError } = require("../constant/err.type");
+const Order = require("../model/order.model");
+const { cancelOrderMid } = require("../ruterExpand/order. Expand");
 const { selectAddr } = require("../service/address.service");
 const { findCart, clearCart_ } = require("../service/cart.service");
 const { selectGoods } = require("../service/goods.service");
@@ -22,7 +24,7 @@ class orderMiddleWare {
 
             if (res.count === 0) {
                 ctx.body = {
-                    code: 1,
+                    code: 4,
                     message: '购物车为空'
                 }
                 return;
@@ -63,9 +65,7 @@ class orderMiddleWare {
 
             //.将总价挂载
             ctx.state.total = total;
-            console.log('总价：', ctx.state.total);
-
-
+            console.log('此订单的总价：', ctx.state.total);
 
             await next();
         } catch (error) {
@@ -96,11 +96,23 @@ class orderMiddleWare {
      * 
      */
     async createOrder(ctx, next) {
-        const { id, num } = ctx.request.body;
+        let { goods_id: id, num } = ctx.request.body;
+        num = parseInt(num)
 
         try {
             //1.查询该商品
             const res = await selectGoods({ id })
+
+            //把商品的数量改一下
+            if (res.goods_num < num) return ctx.app.emit('error', goodsNumIsNullError, ctx)
+            if (res.goods_num > 0) {
+                res.goods_num -= num
+                await res.save()
+                console.log(res.goods_num);
+
+            } else {
+                return ctx.app.emit('error', goodsNumIsNullError, ctx)
+            }
 
             //2.把商品信息good_info 挂载到 ctx.state
             res.cart_num = num
@@ -126,7 +138,8 @@ class orderMiddleWare {
             const { order_number } = ctx.state
             try {
                 //1.取消订单  操作数据库 改变订单状态
-                TimeId = setTimeout(cancelOrder_(state, order_number), time)
+                // TimeId = setTimeout(cancelOrder_(state, order_number), time)
+                TimeId = setTimeout(cancelOrderMid(state, order_number, ctx), time)
                 next()
             } catch (error) {
                 console.error(error);

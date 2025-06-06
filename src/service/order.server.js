@@ -32,19 +32,18 @@ class OrderService {
      * @param {Number} state - 订单状态
      * @param {String} order_number - 订单号
      */
-    cancelOrder_(state, order_number) {
+    async cancelOrder_(state, order_number) {
         //settimeout要传入一个函数
-        return async () => {
-            const res = await Order.update({
-                state
-            }, {
-                where: {
-                    order_number
-                }
-            })
+        const res = await Order.update({
+            state
+        }, {
+            where: {
+                order_number
+            }
+        })
 
-            console.log(`取消订单成功,${order_number},${res}条数据`);
-        }
+        console.log(`取消订单成功,${order_number},改变${res}条数据`);
+        return res
     }
 }
 module.exports = new OrderService()

@@ -207,4 +207,14 @@ module.exports = {
         message: '订单取消失败,数据库操作错误',
         result: ''
     },
+    goodsNumIsNullError: {
+        code: '10040',
+        message: '商品数量不足',
+        result: ''
+    },
+    cancelOrderMiddleWareError: {
+        code: '10041',
+        message: '订单取消中间件错误，操作数据库错误',
+        result: ''
+    }
 }

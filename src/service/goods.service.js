@@ -68,7 +68,7 @@ class GoodsService {
     }
 
     /**
-     * 更新记录 需要一个数组  和一个id
+     * 更新记录 需要一个对象  和一个id
      * @param {*} param0 
      * @returns 
      */

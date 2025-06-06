@@ -35,6 +35,5 @@ router.post('/crete/direct', getUserTokenInfo,
             num: { type: 'number', required: true, allowEmpty: false, message: '商品数量不能为空' }
         }),
     confirmGoodIdAll,
-    confirmGoodId, createOrder, createByGoods, cancelOrder(10000, 4))
-
+    confirmGoodId, createOrder, createByGoods, cancelOrder(4000, 4))
 module.exports = router;
