@@ -45,5 +45,9 @@ class OrderService {
         console.log(`取消订单成功,${order_number},改变${res}条数据`);
         return res
     }
+
+    async findAllOrder_() {
+        return "OK"
+    }
 }
 module.exports = new OrderService()

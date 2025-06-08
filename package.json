@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "o.o": "nodemon ./src/main.js",
+    "c": "node C:\/Users\/75300\/Desktop\/对象原型修改\/symbol_only深浅拷贝.js",
     "seq": "node ./src/db/seq.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

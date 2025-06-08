@@ -1,5 +1,5 @@
-const { createOrderError } = require('../constant/err.type')
-const { creteOrder } = require('../service/order.server')
+const { createOrderError, notFindeOrderInfoError } = require('../constant/err.type')
+const { creteOrder, findAllOrder_ } = require('../service/order.server')
 
 class orderController {
     /**
@@ -64,7 +64,30 @@ class orderController {
         } catch (error) {
             console.error(error);
             ctx.app.emit('error', createOrderError, ctx)
+        }
+    }
 
+    /**
+     * 查询订单列表
+     * query参数
+     */
+    async findAll(ctx, next) {
+        const { page, pageSize, state } = ctx.query
+        const { id: user_id } = ctx.state.user
+
+        //操作数据库
+        try {
+            const res = await findAllOrder_({ page, pageSize, state }, user_id)
+
+            //返回数据
+            ctx.body = {
+                code: 0,
+                message: '查询成功',
+                res
+            }
+        } catch (error) {
+            console.error(error);
+            ctx.app.emit('error', notFindeOrderInfoError, ctx)
         }
     }
 }

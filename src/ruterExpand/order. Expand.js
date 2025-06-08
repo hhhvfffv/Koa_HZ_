@@ -73,6 +73,102 @@ class orderExpand {
 
         }
     }
+
+    /**
+     * 检查需要信息是否存在
+     *  rulesObj对象
+     * validator 自定义验证函数 要有返回值  rulesObj{验证:{validator：（）=》（）
+     * }}
+     */
+    checkInfo(rulesObj) {
+        return async (ctx, next) => {
+            //确认数据源
+            let source = ctx.query
+            let errors = []
+
+            //确定rulesObj是不是对象
+            if (!rulesObj || typeof rulesObj !== 'object') {
+                return console.log('rulesObj不是对象,或者没有传入必要参数');
+            }
+
+            //通过Object的entries方法遍历rulesObj
+            for (let [key, rules] of Object.entries(rulesObj)) {
+
+                //判断规则是不是对象
+                if (!rules || typeof rules !== 'object') {
+                    return console.error(`${key}的rules不是对象,或者没有传入必要参数`);
+                }
+
+                //拿value值
+                let value = source[key] //等于ctx.query.key
+                let messageError = ""//错误信息
+                let isNext = true//是否继续执行下一个规则
+
+                //必要性required
+                if (rules.required && (value === undefined
+                    || value === null
+                    || value === ""
+                )) {
+                    isNext = false
+                    messageError = rules.message || `${key}不能为空`
+                }
+
+                //验证参数是否为空
+                if (isNext || rules.allowEmpty == false) {
+                    if (value == '' || (typeof value === 'string' && value.trim() === '')) {
+                        isNext = false
+                        messageError = rules.message || `${key}不能为空值`
+                    }
+                }
+
+                //类型验证
+                if (isNext && rules.type) {
+                    const type = rules.type.toLowerCase()
+                    const typeOfValue = typeof value
+                    //特殊类型
+                    if (type === 'number' && isNaN(Number(value))) {
+                        isNext = false
+                        messageError = `${key}必须是数字`
+                    }
+
+                    //其他类型
+                    if (isNext || type !== typeOfValue) {
+                        isNext = false
+                        messageError = `${key}必须是${rules.type}`
+                    }
+                }
+
+                //自定义验证函数
+                if (isNext && typeof rules.validator === 'function') {
+                    const isTrue = await rules.validator(value)
+                    if (!isTrue) {
+                        isNext = false
+                        messageError = rules.message + `（）=》` + `自定义验证函数验证失败`
+                    }
+                }
+
+                if (!isNext) {
+                    errors.push({
+                        key,
+                        message: messageError
+                    })
+                }
+            }
+
+            console.log(errors);
+
+
+            //如果有错误，抛出错误
+            if (errors.length > 0) {
+                return ctx.body = {
+                    code: 4,
+                    message: errors
+                }
+            }
+
+            await next()
+        }
+    }
 }
 
 

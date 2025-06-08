@@ -2,8 +2,9 @@ const Router = require('koa-router');
 const { getUserTokenInfo } = require('../middleWare/auth.middleWare');
 const { FieldValidation, confirmGoodIdAll, confirmGoodId } = require('../middleWare/cart.middleWare')
 
-const { create, createByGoods } = require('../controller/order.controller');
+const { create, createByGoods, findAll } = require('../controller/order.controller');
 const { dbSelect, createOrder, clearCart, cancelOrder } = require('../middleWare/order.middleWare');
+const { checkInfo } = require('../ruterExpand/order. Expand');
 
 
 const router = new Router({ prefix: '/orders' });
@@ -36,4 +37,20 @@ router.post('/crete/direct', getUserTokenInfo,
         }),
     confirmGoodIdAll,
     confirmGoodId, createOrder, createByGoods, cancelOrder(4000, 4))
+
+
+/**
+ * 查询订单列表
+ * pageSize,pageNumbwr,state
+ */
+router.get('/', getUserTokenInfo, checkInfo({
+    pageSize: { required: true, allowEmpty: false, message: 'pageSize不能为空' },
+    pageNumber: {
+        required: true, allowEmpty: false, message: 'pageNumber不能为空', validator: (pageNumber) => {
+            if (pageNumber <= 2) return false;
+            return true;
+        }
+    },
+}), findAll)
+
 module.exports = router;

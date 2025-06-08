@@ -119,7 +119,7 @@ module.exports = {
     },
     ParameterCartError: {
         code: '10023',
-        message: '购物车参数错误',
+        message: '验证参数错误',
         result: ''
     },
     notFountIdError: {
@@ -215,6 +215,11 @@ module.exports = {
     cancelOrderMiddleWareError: {
         code: '10041',
         message: '订单取消中间件错误，操作数据库错误',
+        result: ''
+    },
+    notFindeOrderInfoError: {
+        code: '10042',
+        message: '订单信息无法查找，数据库操作错误',
         result: ''
     }
 }
