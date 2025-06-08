@@ -9,7 +9,6 @@ let TimeId = null
 
 class orderMiddleWare {
     /**
-     * //检查地址id是否存在
     //查询他的购物车
     //计算总价
     会将goods_info total 挂载到ctx.state中

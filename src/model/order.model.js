@@ -2,6 +2,7 @@ const seq = require('../db/seq')
 const { DataTypes } = require('sequelize');
 const Goods = require('./goods.model');
 const Address = require('./address.model');
+const User = require('./user.model');
 
 const Order = seq.define('zd_orders', {
     user_id: {
@@ -46,10 +47,10 @@ const Order = seq.define('zd_orders', {
         freezeTableName: true,
     })
 
-//建立了了两个外键，一个是goods_id，一个是address_id
-Order.belongsTo(Goods, {
-    foreignKey: 'goods_id',
-    as: 'good_info'
+//建立了了两个外键，一个是user_id，一个是address_id
+Order.belongsTo(User, {
+    foreignKey: 'user_id',
+    as: 'user_info'
 })
 Order.belongsTo(Address, {
     foreignKey: 'address_id',

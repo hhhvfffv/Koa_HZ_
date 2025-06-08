@@ -1,5 +1,5 @@
 const { createOrderError, notFindeOrderInfoError } = require('../constant/err.type')
-const { creteOrder, findAllOrder_ } = require('../service/order.server')
+const { creteOrder, findAllOrder_, updateOrder } = require('../service/order.server')
 
 class orderController {
     /**
@@ -72,12 +72,16 @@ class orderController {
      * query参数
      */
     async findAll(ctx, next) {
-        const { page, pageSize, state } = ctx.query
+        const { pageNum, pageSize, state } = ctx.query
         const { id: user_id } = ctx.state.user
 
         //操作数据库
         try {
-            const res = await findAllOrder_({ page, pageSize, state }, user_id)
+            const res = await findAllOrder_({ pageSize, pageNum, state }, user_id)
+            //将goods_info转化为对象
+            res.list.forEach(item => {
+                item.goods_info = JSON.parse(item.goods_info) //将goods_info转化为对象
+            })
 
             //返回数据
             ctx.body = {
@@ -88,6 +92,27 @@ class orderController {
         } catch (error) {
             console.error(error);
             ctx.app.emit('error', notFindeOrderInfoError, ctx)
+        }
+    }
+
+    /**
+     * 更新订单状态
+     */
+    async update(ctx, next) {
+        const { order_number, state, address_id } = ctx.request.body
+        const { id: user_id } = ctx.state.user
+
+        try {
+            const res = await updateOrder({ order_number, state, address_id, user_id })
+            //返回数据
+            ctx.body = {
+                code: 0,
+                message: '更新成功',
+                res: res[0] ? "更新成功" : "更新失败"
+            }
+        } catch (error) {
+            console.error(error);
+            return ctx.app.emit('error', notFindeOrderInfoError, ctx)
         }
     }
 }

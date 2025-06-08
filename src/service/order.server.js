@@ -1,5 +1,6 @@
+const Address = require('../model/address.model')
 const Order = require('../model/order.model')
-const { selectGoods } = require('./goods.service')
+const User = require('../model/user.model')
 class OrderService {
     /**
      * 新建订单
@@ -46,8 +47,60 @@ class OrderService {
         return res
     }
 
-    async findAllOrder_() {
-        return "OK"
+    /**
+     * { pageSize, pageNum, state }, user_id
+     * @param {*} param0 
+     * @param {*} user_id 
+     * @returns 
+     */
+    async findAllOrder_({ pageSize, pageNum, state }, user_id) {
+        console.log(pageSize, pageNum, state, user_id);
+
+        //需要要求的参数，通过user_id获取
+        //需要对应的地址id  和地址详细参数
+        //user_id对应的用户名字
+        const offset = (pageNum - 1) * pageSize;
+        const { rows, count } = await Order.findAndCountAll({
+            attributes: { exclude: ['createdAt', 'updatedAt'] },//不返回字段
+            offset,
+            limit: +pageSize,
+            where: { state, user_id },
+            include: [{ //外键关联模型一
+                model: Address,
+                as: 'address_info',//别名{也就是返回的数据的名字}
+                //会自动查询关联字段的对应记录
+                attributes: { exclude: ['createdAt', 'updatedAt', 'user_id', 'isdefault'] },
+            }, { //外键关联模型二
+                model: User,
+                as: 'user_info',//别名{也就是返回的数据的名字}
+                attributes: { exclude: ['createdAt', 'updatedAt', 'password', 'isAdmin'] },
+            }]
+        })
+
+
+        return {
+            pageNum,
+            pageSize,
+            total: count,
+            list: rows
+        }
+    }
+
+    /**
+     * 更新订单
+     */
+    async updateOrder({ order_number, state, address_id, user_id }) {
+        const res = await Order.update({
+            state,
+            address_id,
+        }, {
+            where: {
+                user_id,
+                order_number,
+            }
+        })
+
+        return res
     }
 }
 module.exports = new OrderService()

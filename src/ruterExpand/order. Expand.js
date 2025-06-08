@@ -80,10 +80,10 @@ class orderExpand {
      * validator 自定义验证函数 要有返回值  rulesObj{验证:{validator：（）=》（）
      * }}
      */
-    checkInfo(rulesObj) {
+    checkInfo(rulesObj, num) {
         return async (ctx, next) => {
             //确认数据源
-            let source = ctx.query
+            let source = num ? ctx.request.body : ctx.query
             let errors = []
 
             //确定rulesObj是不是对象
@@ -154,9 +154,6 @@ class orderExpand {
                     })
                 }
             }
-
-            console.log(errors);
-
 
             //如果有错误，抛出错误
             if (errors.length > 0) {
